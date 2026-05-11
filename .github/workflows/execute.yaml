@@ -76,6 +76,19 @@ jobs:
             jupyter nbconvert --to notebook --execute --inplace "$nb"
           done <<< "${{ steps.pick.outputs.files }}"
 
+      - name: Strip widget metadata
+        if: steps.pick.outputs.files != ''
+        # `pooch` and other libs spawn `tqdm.notebook` widgets when running
+        # in a Jupyter kernel; widget UUIDs regenerate on every execution and
+        # would cause spurious diff failures below. Same hook runs locally
+        # via .pre-commit-config.yaml so committed and re-executed notebooks
+        # stay symmetric.
+        run: |
+          while IFS= read -r nb; do
+            [ -z "$nb" ] && continue
+            python scripts/strip_widget_metadata.py "$nb" || true
+          done <<< "${{ steps.pick.outputs.files }}"
+
       - name: Diff outputs against committed
         if: steps.pick.outputs.files != ''
         run: |

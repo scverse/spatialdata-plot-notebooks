@@ -1,3 +1,19 @@
+# pre-commit config. Auto-run on PRs by pre-commit.ci (see ci: block below);
+# run locally with `pre-commit run --all-files` after `pip install pre-commit`.
+
+ci:
+  # Auto-fix PRs where possible; tag the commit so it's clearly bot-authored.
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit.com hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ""
+  autoupdate_commit_msg: "[pre-commit.ci] pre-commit autoupdate"
+  autoupdate_schedule: monthly
+  skip: []
+  submodules: false
+
 fail_fast: false
 default_language_version:
   python: python3
@@ -25,9 +41,22 @@ repos:
       - id: ruff
         args: [--fix]
       - id: ruff-format
+        # Notebook cells use a chained fluent API; ruff-format collapses
+        # short chains onto one line which hurts readability. Lint notebooks
+        # via nbqa-ruff (below) instead.
+        exclude: \.ipynb$
 
   - repo: https://github.com/nbQA-dev/nbQA
     rev: 1.9.0
     hooks:
       - id: nbqa-ruff
         args: [--fix]
+
+  - repo: local
+    hooks:
+      - id: strip-widget-metadata
+        name: Strip Jupyter widget metadata from notebooks
+        entry: python scripts/strip_widget_metadata.py
+        language: system
+        files: \.ipynb$
+        require_serial: false
