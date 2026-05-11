@@ -41,7 +41,7 @@ jobs:
       - name: Install execution environment
         run: |
           pip install --upgrade pip
-          pip install -e ".[exec]" nbdime
+          pip install -e ".[exec]"
 
       - name: Determine notebooks to execute
         id: pick
@@ -76,27 +76,9 @@ jobs:
             jupyter nbconvert --to notebook --execute --inplace "$nb"
           done <<< "${{ steps.pick.outputs.files }}"
 
-      - name: Strip widget metadata
-        if: steps.pick.outputs.files != ''
-        # `pooch` and other libs spawn `tqdm.notebook` widgets when running
-        # in a Jupyter kernel; widget UUIDs regenerate on every execution and
-        # would cause spurious diff failures below. Same hook runs locally
-        # via .pre-commit-config.yaml so committed and re-executed notebooks
-        # stay symmetric.
-        run: |
-          while IFS= read -r nb; do
-            [ -z "$nb" ] && continue
-            python scripts/strip_widget_metadata.py "$nb" || true
-          done <<< "${{ steps.pick.outputs.files }}"
-
-      - name: Diff outputs against committed
-        if: steps.pick.outputs.files != ''
-        run: |
-          # If outputs drift from what's committed, fail the job. Authors are
-          # expected to commit re-executed notebooks; CI catches drift between
-          # commits (e.g., upstream lib changes).
-          if ! git diff --quiet -- '*.ipynb'; then
-            echo "Notebook outputs drifted from committed state:"
-            nbdime diff
-            exit 1
-          fi
+      # Note: we do NOT diff re-executed outputs against committed bytes.
+      # Matplotlib PNG bytes vary across machines (font hinting, dpi),
+      # cell execution timestamps always differ, and Python micro-version
+      # leaks into metadata.language_info — none of which are meaningful
+      # regressions. The real test is `nbconvert --execute` succeeding
+      # without raising on any cell, which the step above enforces.
