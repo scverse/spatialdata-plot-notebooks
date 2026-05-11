@@ -1,0 +1,639 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Getting started with spatialdata-plot" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="notebooks/tutorials/getting_started.html" />
+<meta property="og:site_name" content="spatialdata-plot" />
+<meta property="og:description" content="This tutorial walks through the core mental model of spatialdata-plot: a fluent API on top of a SpatialData object that lets you layer the four spatial element types (images, labels, shapes, points..." />
+<meta property="og:image:width" content="1146" />
+<meta property="og:image:height" content="600" />
+<meta property="og:image" content="_images/social_previews/summary_notebooks_tutorials_getting_started_6b6d9058.png" />
+<meta property="og:image:alt" content="This tutorial walks through the core mental model of spatialdata-plot: a fluent API on top of a SpatialData object that lets you layer the four spatial element types (images, labels, shapes, points..." />
+<meta name="description" content="This tutorial walks through the core mental model of spatialdata-plot: a fluent API on top of a SpatialData object that lets you layer the four spatial element types (images, labels, shapes, points..." />
+<meta name="twitter:card" content="summary_large_image" />
+
+    <title>Getting started with spatialdata-plot &#8212; spatialdata-plot</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/katex-math.css?v=05624691" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=366103d0" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=ad205d25"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/tutorials/getting_started';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Plotting Visium spatial transcriptomics data" href="visium_breast_cancer.html" />
+    <link rel="prev" title="Tutorials" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="0.3.4.dev25+g6687b876f.d20260511" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/spatialdata_horizontal.png" class="logo__image only-light" alt="spatialdata-plot - Home"/>
+    <img src="../../_static/spatialdata_horizontal.png" class="logo__image only-dark pst-js-only" alt="spatialdata-plot - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../gallery.html">Gallery</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="index.html">Tutorials</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l3 current active"><a class="current reference internal" href="#">Getting started with spatialdata-plot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="visium_breast_cancer.html">Plotting Visium spatial transcriptomics data</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2"><a class="reference internal" href="../examples/index.html">Examples</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api.html">API</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../plotting.html">Plotting (<code class="docutils literal notranslate"><span class="pre">.pl</span></code>)</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../references.html">References</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/scverse/spatialdata-plot.git" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/notebooks/tutorials/getting_started.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Getting started with spatialdata-plot</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data">The data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-fluent-pl-api">The fluent <code class="docutils literal notranslate"><span class="pre">.pl</span></code> API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#render-an-image">Render an image</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#render-labels">Render labels</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#render-points">Render points</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#layering-elements">Layering elements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coloring-by-a-feature">Coloring by a feature</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#styling-a-publication-figure">Styling a publication figure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#where-to-next">Where to next</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="getting-started-with-spatialdata-plot">
+<h1>Getting started with spatialdata-plot<a class="headerlink" href="#getting-started-with-spatialdata-plot" title="Link to this heading">#</a></h1>
+<p>This tutorial walks through the core mental model of <a class="reference external" href="https://github.com/scverse/spatialdata-plot"><code class="docutils literal notranslate"><span class="pre">spatialdata-plot</span></code></a>: a fluent API on top of a <code class="docutils literal notranslate"><span class="pre">SpatialData</span></code> object that lets you layer the four spatial element types (images, labels, shapes, points) into a single matplotlib figure.</p>
+<p>We use the lightweight built-in <code class="docutils literal notranslate"><span class="pre">blobs</span></code> dataset so this notebook runs in seconds with zero downloads. Once the API clicks, the same calls work on Visium, Xenium, MERFISH, or any other dataset that can be loaded as a <code class="docutils literal notranslate"><span class="pre">SpatialData</span></code> object — see the other tutorials in this gallery for real-world examples.</p>
+<section id="the-data">
+<h2>The data<a class="headerlink" href="#the-data" title="Link to this heading">#</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">sd.datasets.blobs()</span></code> returns a <code class="docutils literal notranslate"><span class="pre">SpatialData</span></code> object containing one image, one label mask, one points layer, and several shape layers — all aligned in the <code class="docutils literal notranslate"><span class="pre">global</span></code> coordinate system.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">spatialdata</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">spatialdata_plot</span>  <span class="c1"># noqa: F401  (registers the .pl accessor)</span>
+
+<span class="n">sdata</span> <span class="o">=</span> <span class="n">sd</span><span class="o">.</span><span class="n">datasets</span><span class="o">.</span><span class="n">blobs</span><span class="p">()</span>
+<span class="n">sdata</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SpatialData object
+├── Images
+│     ├── &#39;blobs_image&#39;: DataArray[cyx] (3, 512, 512)
+│     └── &#39;blobs_multiscale_image&#39;: DataTree[cyx] (3, 512, 512), (3, 256, 256), (3, 128, 128)
+├── Labels
+│     ├── &#39;blobs_labels&#39;: DataArray[yx] (512, 512)
+│     └── &#39;blobs_multiscale_labels&#39;: DataTree[yx] (512, 512), (256, 256), (128, 128)
+├── Points
+│     └── &#39;blobs_points&#39;: DataFrame with shape: (&lt;Delayed&gt;, 4) (2D points)
+├── Shapes
+│     ├── &#39;blobs_circles&#39;: GeoDataFrame shape: (5, 2) (2D shapes)
+│     ├── &#39;blobs_multipolygons&#39;: GeoDataFrame shape: (2, 1) (2D shapes)
+│     └── &#39;blobs_polygons&#39;: GeoDataFrame shape: (5, 1) (2D shapes)
+└── Tables
+      └── &#39;table&#39;: AnnData (26, 3)
+with coordinate systems:
+    ▸ &#39;global&#39;, with elements:
+        blobs_image (Images), blobs_multiscale_image (Images), blobs_labels (Labels), blobs_multiscale_labels (Labels), blobs_points (Points), blobs_circles (Shapes), blobs_multipolygons (Shapes), blobs_polygons (Shapes)
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="the-fluent-pl-api">
+<h2>The fluent <code class="docutils literal notranslate"><span class="pre">.pl</span></code> API<a class="headerlink" href="#the-fluent-pl-api" title="Link to this heading">#</a></h2>
+<p>Every plot follows the same shape:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sdata</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_</span><span class="o">&lt;</span><span class="n">element</span><span class="o">&gt;</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_</span><span class="o">&lt;</span><span class="n">element</span><span class="o">&gt;</span><span class="p">(</span><span class="o">...</span><span class="p">)</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Each <code class="docutils literal notranslate"><span class="pre">render_*</span></code> call <strong>stages</strong> an element to draw and returns the <code class="docutils literal notranslate"><span class="pre">SpatialData</span></code> object, so calls chain. <code class="docutils literal notranslate"><span class="pre">pl.show()</span></code> draws everything onto a matplotlib figure.</p>
+<section id="render-an-image">
+<h3>Render an image<a class="headerlink" href="#render-an-image" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sdata</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_images</span><span class="p">(</span><span class="s2">&quot;blobs_image&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/4db0a6d3c549d6354700021a9c27edd64854e65de19fc15ba57c88f6bfec5c2d.png" src="../../_images/4db0a6d3c549d6354700021a9c27edd64854e65de19fc15ba57c88f6bfec5c2d.png" />
+</div>
+</div>
+</section>
+<section id="render-labels">
+<h3>Render labels<a class="headerlink" href="#render-labels" title="Link to this heading">#</a></h3>
+<p>By default, labels are filled. Use <code class="docutils literal notranslate"><span class="pre">contour_px</span></code> to draw boundaries instead — useful for overlaying segmentations on top of an image without hiding pixel-level detail.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sdata</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_labels</span><span class="p">(</span><span class="s2">&quot;blobs_labels&quot;</span><span class="p">,</span> <span class="n">contour_px</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/7c376ba35f2dfe44644ae6ee5429081d407c483b26d7bdd97ddb67fd77fed466.png" src="../../_images/7c376ba35f2dfe44644ae6ee5429081d407c483b26d7bdd97ddb67fd77fed466.png" />
+</div>
+</div>
+</section>
+<section id="render-points">
+<h3>Render points<a class="headerlink" href="#render-points" title="Link to this heading">#</a></h3>
+<p>Points carry per-row metadata (here, a <code class="docutils literal notranslate"><span class="pre">genes</span></code> column). Pass <code class="docutils literal notranslate"><span class="pre">color=</span></code> to color points by any column in the points dataframe or any var/obs column in the linked table.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sdata</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_points</span><span class="p">(</span><span class="s2">&quot;blobs_points&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;genes&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/19c3e6d3f0c4acddbef67cd2b7aa66d603d81ce96cab0f4a983c370f1e164d66.png" src="../../_images/19c3e6d3f0c4acddbef67cd2b7aa66d603d81ce96cab0f4a983c370f1e164d66.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="layering-elements">
+<h2>Layering elements<a class="headerlink" href="#layering-elements" title="Link to this heading">#</a></h2>
+<p>The real value of the fluent API shows up when combining elements. Render order matters: later calls draw on top of earlier ones.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
+    <span class="n">sdata</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_images</span><span class="p">(</span><span class="s2">&quot;blobs_image&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_labels</span><span class="p">(</span><span class="s2">&quot;blobs_labels&quot;</span><span class="p">,</span> <span class="n">contour_px</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">outline_alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_points</span><span class="p">(</span><span class="s2">&quot;blobs_points&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;genes&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/f87cef6284872ee0c8fb89781c26d2910f575c156b92448948bd22bc7cabda66.png" src="../../_images/f87cef6284872ee0c8fb89781c26d2910f575c156b92448948bd22bc7cabda66.png" />
+</div>
+</div>
+</section>
+<section id="coloring-by-a-feature">
+<h2>Coloring by a feature<a class="headerlink" href="#coloring-by-a-feature" title="Link to this heading">#</a></h2>
+<p>Both <code class="docutils literal notranslate"><span class="pre">render_labels</span></code> and <code class="docutils literal notranslate"><span class="pre">render_shapes</span></code> accept <code class="docutils literal notranslate"><span class="pre">color=</span></code> to map a column from the linked <code class="docutils literal notranslate"><span class="pre">AnnData</span></code> table onto element fill. Here we color label regions by a per-region intensity (<code class="docutils literal notranslate"><span class="pre">channel_0_sum</span></code>).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
+    <span class="n">sdata</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_images</span><span class="p">(</span><span class="s2">&quot;blobs_image&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_labels</span><span class="p">(</span><span class="s2">&quot;blobs_labels&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;channel_0_sum&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;magma&quot;</span><span class="p">,</span> <span class="n">fill_alpha</span><span class="o">=</span><span class="mf">0.6</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/f2287ba513f96abc29e7ae842e5f32a039c66791075527eb48a7a21286d9d253.png" src="../../_images/f2287ba513f96abc29e7ae842e5f32a039c66791075527eb48a7a21286d9d253.png" />
+</div>
+</div>
+</section>
+<section id="styling-a-publication-figure">
+<h2>Styling a publication figure<a class="headerlink" href="#styling-a-publication-figure" title="Link to this heading">#</a></h2>
+<p>Combine multiple parameters for a polished overlay. Most styling parameters mirror matplotlib’s vocabulary (<code class="docutils literal notranslate"><span class="pre">cmap</span></code>, <code class="docutils literal notranslate"><span class="pre">alpha</span></code>, <code class="docutils literal notranslate"><span class="pre">linewidth</span></code>, named colors, hex codes), so anything you know from matplotlib works here too.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
+    <span class="n">sdata</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_images</span><span class="p">(</span><span class="s2">&quot;blobs_image&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_shapes</span><span class="p">(</span>
+        <span class="s2">&quot;blobs_circles&quot;</span><span class="p">,</span>
+        <span class="n">fill_alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+        <span class="n">outline_width</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+        <span class="n">outline_color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+        <span class="n">outline_alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_points</span><span class="p">(</span><span class="s2">&quot;blobs_points&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;genes&quot;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/9f68450e3a7f04d0d2c261e093884a9eb6129a1a6ecd97321abf1bd14d235115.png" src="../../_images/9f68450e3a7f04d0d2c261e093884a9eb6129a1a6ecd97321abf1bd14d235115.png" />
+</div>
+</div>
+</section>
+<section id="where-to-next">
+<h2>Where to next<a class="headerlink" href="#where-to-next" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>API reference</strong> — every parameter for every <code class="docutils literal notranslate"><span class="pre">render_*</span></code> is documented in the <a class="reference external" href="https://spatialdata.scverse.org/projects/plot/en/latest/api.html">plotting API</a>.</p></li>
+<li><p><strong>Real-data tutorials</strong> — see the other notebooks in this gallery for Visium, Xenium, and MERFISH examples that combine these primitives into complete analyses.</p></li>
+<li><p><strong>Contributing</strong> — found a missing example? Open a PR on <a class="reference external" href="https://github.com/scverse/spatialdata-plot-notebooks"><code class="docutils literal notranslate"><span class="pre">spatialdata-plot-notebooks</span></code></a>.</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Tutorials</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="visium_breast_cancer.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Plotting Visium spatial transcriptomics data</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data">The data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-fluent-pl-api">The fluent <code class="docutils literal notranslate"><span class="pre">.pl</span></code> API</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#render-an-image">Render an image</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#render-labels">Render labels</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#render-points">Render points</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#layering-elements">Layering elements</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#coloring-by-a-feature">Coloring by a feature</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#styling-a-publication-figure">Styling a publication figure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#where-to-next">Where to next</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By scverse
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, scverse..
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
