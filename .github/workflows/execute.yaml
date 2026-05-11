@@ -2,7 +2,7 @@ name: Execute notebooks
 
 on:
   schedule:
-    # Weekly: Mondays 04:00 UTC
+    # Weekly: Mondays 04:00 UTC — re-executes ALL notebooks against latest releases.
     - cron: "0 4 * * 1"
   pull_request:
     branches: [main]
@@ -23,7 +23,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
         with:
-          # Need full history so nbdime can diff against base.
+          # Need full history so we can diff PR HEAD against the merge base.
           fetch-depth: 0
 
       - uses: actions/setup-python@v5
@@ -41,18 +41,43 @@ jobs:
       - name: Install execution environment
         run: |
           pip install --upgrade pip
-          pip install -e ".[exec]" nbdime jupyter
+          pip install -e ".[exec]" nbdime
 
-      - name: Re-execute notebooks
+      - name: Determine notebooks to execute
+        id: pick
         run: |
-          # Find every notebook under tutorials/ and examples/, execute in
-          # place, fail on any cell error.
-          find tutorials examples -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" | while read -r nb; do
+          # On the weekly schedule and manual dispatch, run all notebooks.
+          # On PR, run only notebooks the PR touched, to keep CI fast as the
+          # gallery grows. (sklearn does the same.)
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="${{ github.event.pull_request.base.sha }}"
+            nbs=$(git diff --name-only --diff-filter=AMR "$base"...HEAD -- '*.ipynb' | grep -E '^(tutorials|examples)/' || true)
+          else
+            nbs=$(find tutorials examples -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" 2>/dev/null || true)
+          fi
+          if [ -z "$nbs" ]; then
+            echo "No notebooks to execute."
+          else
+            echo "Will execute:"
+            echo "$nbs"
+          fi
+          {
+            echo 'files<<EOF'
+            echo "$nbs"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Re-execute selected notebooks
+        if: steps.pick.outputs.files != ''
+        run: |
+          while IFS= read -r nb; do
+            [ -z "$nb" ] && continue
             echo "Executing $nb"
             jupyter nbconvert --to notebook --execute --inplace "$nb"
-          done
+          done <<< "${{ steps.pick.outputs.files }}"
 
       - name: Diff outputs against committed
+        if: steps.pick.outputs.files != ''
         run: |
           # If outputs drift from what's committed, fail the job. Authors are
           # expected to commit re-executed notebooks; CI catches drift between

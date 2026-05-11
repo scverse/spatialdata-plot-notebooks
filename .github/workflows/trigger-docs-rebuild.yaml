@@ -1,0 +1,36 @@
+name: Trigger spatialdata-plot docs rebuild
+
+on:
+  push:
+    branches: [main]
+    paths:
+      # Only the rendered content matters to the lib's docs build.
+      - "**/*.ipynb"
+      - "tutorials/**"
+      - "examples/**"
+  workflow_dispatch:
+
+jobs:
+  trigger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger ReadTheDocs build of spatialdata-plot latest
+        env:
+          RTD_TOKEN: ${{ secrets.RTD_TOKEN }}
+          # The RTD project slug — verify in RTD admin (the URL segment of the
+          # project's dashboard page). For scverse this is typically
+          # `spatialdata-plot`; if the project is hosted under a different slug,
+          # update here.
+          RTD_PROJECT: spatialdata-plot
+        run: |
+          if [ -z "$RTD_TOKEN" ]; then
+            echo "RTD_TOKEN secret is not set; skipping rebuild trigger."
+            echo "To enable: generate a token at https://readthedocs.org/accounts/tokens/"
+            echo "and add it as the RTD_TOKEN repository secret."
+            exit 0
+          fi
+          response=$(curl -fsS -X POST \
+            -H "Authorization: Token $RTD_TOKEN" \
+            "https://readthedocs.org/api/v3/projects/$RTD_PROJECT/versions/latest/builds/" \
+            -w "\nHTTP %{http_code}")
+          echo "$response"
