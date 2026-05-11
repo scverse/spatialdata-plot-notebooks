@@ -8,5 +8,5 @@ spatial elements, and styling a publication-ready figure.
 :maxdepth: 1
 
 getting_started
-visium_breast_cancer
+visium_mouse_brain
 ```
