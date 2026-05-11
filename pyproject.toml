@@ -1,0 +1,46 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "spatialdata-plot-notebooks"
+version = "0.0.0"
+description = "Executable notebooks demonstrating spatialdata-plot on real spatial-omics datasets."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+authors = [{ name = "scverse" }]
+
+# The package itself ships no Python code; this is a pyproject for tooling +
+# environment management. The `exec` extra installs everything needed to run
+# the notebooks end-to-end.
+[project.optional-dependencies]
+exec = [
+    "spatialdata-plot>=0.3",
+    "squidpy",
+    "jupyter",
+    "ipykernel",
+]
+dev = [
+    "pre-commit>=3.0",
+    "ruff",
+    "nbstripout",
+]
+
+[project.urls]
+Source = "https://github.com/scverse/spatialdata-plot-notebooks"
+Documentation = "https://spatialdata.scverse.org/projects/plot/en/latest/"
+
+[tool.hatch.build.targets.wheel]
+bypass-selection = true
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+ignore = ["E501"]  # long lines fine in notebooks
+
+[tool.ruff.lint.per-file-ignores]
+"*.ipynb" = ["E402"]  # imports after markdown intro cells are common

@@ -1,0 +1,64 @@
+name: Execute notebooks
+
+on:
+  schedule:
+    # Weekly: Mondays 04:00 UTC
+    - cron: "0 4 * * 1"
+  pull_request:
+    branches: [main]
+    paths:
+      - "**/*.ipynb"
+      - "pyproject.toml"
+      - ".github/workflows/execute.yaml"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  execute:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # Need full history so nbdime can diff against base.
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Cache pooch datasets
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pooch
+          key: pooch-${{ runner.os }}-${{ hashFiles('**/*.ipynb') }}
+          restore-keys: |
+            pooch-${{ runner.os }}-
+
+      - name: Install execution environment
+        run: |
+          pip install --upgrade pip
+          pip install -e ".[exec]" nbdime jupyter
+
+      - name: Re-execute notebooks
+        run: |
+          # Find every notebook under tutorials/ and examples/, execute in
+          # place, fail on any cell error.
+          find tutorials examples -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" | while read -r nb; do
+            echo "Executing $nb"
+            jupyter nbconvert --to notebook --execute --inplace "$nb"
+          done
+
+      - name: Diff outputs against committed
+        run: |
+          # If outputs drift from what's committed, fail the job. Authors are
+          # expected to commit re-executed notebooks; CI catches drift between
+          # commits (e.g., upstream lib changes).
+          if ! git diff --quiet -- '*.ipynb'; then
+            echo "Notebook outputs drifted from committed state:"
+            nbdime diff
+            exit 1
+          fi
