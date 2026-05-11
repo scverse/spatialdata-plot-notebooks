@@ -33,7 +33,6 @@ jobs:
         with:
           repository: scverse/spatialdata-plot
           path: lib
-          fetch-depth: 0
 
       - name: Mount PR notebooks into lib's submodule path
         run: |
@@ -69,7 +68,10 @@ jobs:
             const pr = context.issue.number;
             const owner = context.repo.owner;
             const repo = context.repo.repo;
-            const url = `https://${owner}.github.io/${repo}/pr-${pr}/gallery.html`;
+            // Use the canonical scverse.org URL directly. The github.io URL
+            // 301-redirects there because of the org-wide CNAME, which makes
+            // the displayed link confusingly different from the destination.
+            const url = `https://scverse.org/${repo}/pr-${pr}/gallery.html`;
             const marker = '<!-- preview-link -->';
             const body = `${marker}\n📖 **Docs preview**: ${url}\n\n_Built from ${context.sha.substring(0, 7)}; redeployed on every push._`;
             const { data: comments } = await github.rest.issues.listComments({ owner, repo, issue_number: pr });

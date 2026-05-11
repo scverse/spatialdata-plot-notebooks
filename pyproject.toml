@@ -20,6 +20,7 @@ exec = [
     "squidpy",
     "jupyter",
     "ipykernel",
+    "watermark",
 ]
 dev = [
     "pre-commit>=3.0",
