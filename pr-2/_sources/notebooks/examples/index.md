@@ -1,11 +1,10 @@
 # Examples
 
-Short, focused notebooks demonstrating individual `spatialdata-plot` features.
-Use these as a quick reference when you know what you want to do and need to
-see the call shape.
+Worked examples showing `spatialdata-plot` on real spatial-omics datasets.
+Use these to see how the API composes on data you'd actually analyse.
 
-```{note}
-No examples yet — contributions welcome! See
-[CONTRIBUTING](https://github.com/scverse/spatialdata-plot-notebooks/blob/main/CONTRIBUTING.md)
-for how to add one.
+```{toctree}
+:maxdepth: 1
+
+visium_mouse_brain
 ```
