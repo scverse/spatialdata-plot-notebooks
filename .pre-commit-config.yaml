@@ -59,4 +59,3 @@ repos:
         entry: python scripts/strip_widget_metadata.py
         language: system
         files: \.ipynb$
-        require_serial: false

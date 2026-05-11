@@ -2,7 +2,7 @@ name: Execute notebooks
 
 on:
   schedule:
-    # Weekly: Mondays 04:00 UTC — re-executes ALL notebooks against latest releases.
+    # Weekly: Mondays 04:00 UTC; re-executes ALL notebooks against latest releases.
     - cron: "0 4 * * 1"
   pull_request:
     branches: [main]
@@ -22,19 +22,21 @@ jobs:
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v5
-        with:
-          # Need full history so we can diff PR HEAD against the merge base.
-          fetch-depth: 0
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.13"
+          cache: pip
+          cache-dependency-path: pyproject.toml
 
       - name: Cache pooch datasets
         uses: actions/cache@v4
         with:
           path: ~/.cache/pooch
-          key: pooch-${{ runner.os }}-${{ hashFiles('**/*.ipynb') }}
+          # Datasets are pinned by URL inside notebook code, not by the
+          # notebook's surrounding markdown — bump the v* suffix when an
+          # actually-new dataset URL lands.
+          key: pooch-${{ runner.os }}-v1
           restore-keys: |
             pooch-${{ runner.os }}-
 
@@ -43,15 +45,22 @@ jobs:
           pip install --upgrade pip
           pip install -e ".[exec]"
 
+      - name: Detect changed notebooks (PR only)
+        if: github.event_name == 'pull_request'
+        id: changed
+        uses: tj-actions/changed-files@v45
+        with:
+          files: |
+            tutorials/**/*.ipynb
+            examples/**/*.ipynb
+
       - name: Determine notebooks to execute
         id: pick
         run: |
-          # On the weekly schedule and manual dispatch, run all notebooks.
-          # On PR, run only notebooks the PR touched, to keep CI fast as the
-          # gallery grows. (sklearn does the same.)
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            base="${{ github.event.pull_request.base.sha }}"
-            nbs=$(git diff --name-only --diff-filter=AMR "$base"...HEAD -- '*.ipynb' | grep -E '^(tutorials|examples)/' || true)
+            nbs="${{ steps.changed.outputs.all_changed_files }}"
+            # tj-actions emits space-separated; one-per-line for the loop below.
+            nbs=$(printf '%s\n' $nbs)
           else
             nbs=$(find tutorials examples -name "*.ipynb" -not -path "*/.ipynb_checkpoints/*" 2>/dev/null || true)
           fi
@@ -75,10 +84,3 @@ jobs:
             echo "Executing $nb"
             jupyter nbconvert --to notebook --execute --inplace "$nb"
           done <<< "${{ steps.pick.outputs.files }}"
-
-      # Note: we do NOT diff re-executed outputs against committed bytes.
-      # Matplotlib PNG bytes vary across machines (font hinting, dpi),
-      # cell execution timestamps always differ, and Python micro-version
-      # leaks into metadata.language_info — none of which are meaningful
-      # regressions. The real test is `nbconvert --execute` succeeding
-      # without raising on any cell, which the step above enforces.

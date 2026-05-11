@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 """Strip Jupyter widget metadata + outputs from .ipynb files.
 
-Widget UUIDs are regenerated on every execution, so any notebook that runs
-something using `tqdm.notebook` (e.g. `pooch` downloads, `scanpy` progress
-bars in a Jupyter kernel) drifts on every re-execution. Stripping widgets
-makes the diff-against-committed check in `execute.yaml` deterministic, and
-keeps committed notebooks reproducible without losing the visible outputs
-(figures, repr cells, prints).
+Anything using `tqdm.notebook` (pooch downloads, scanpy progress bars in a
+Jupyter kernel) emits widget output blobs whose UUIDs regenerate on every
+execution. Stripping them keeps committed notebooks small and produces
+clean PR diffs that reflect real source changes only.
 
 Usage: strip_widget_metadata.py <notebook> [<notebook> ...]
 Exits 0 if no changes, 1 if files were modified (so pre-commit reports the

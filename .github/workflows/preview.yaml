@@ -33,7 +33,6 @@ jobs:
         with:
           repository: scverse/spatialdata-plot
           path: lib
-          fetch-depth: 0
 
       - name: Mount PR notebooks into lib's submodule path
         run: |
