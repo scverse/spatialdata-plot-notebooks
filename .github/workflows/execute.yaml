@@ -79,8 +79,12 @@ jobs:
       - name: Re-execute selected notebooks
         if: steps.pick.outputs.files != ''
         run: |
+          # Pin kernel_name to python3 so notebooks committed with a
+          # contributor-local kernel name (e.g. from a pixi `kernel-install`
+          # task) still execute against CI's stock python3 kernel.
           while IFS= read -r nb; do
             [ -z "$nb" ] && continue
             echo "Executing $nb"
-            jupyter nbconvert --to notebook --execute --inplace "$nb"
+            jupyter nbconvert --to notebook --execute --inplace \
+              --ExecutePreprocessor.kernel_name=python3 "$nb"
           done <<< "${{ steps.pick.outputs.files }}"

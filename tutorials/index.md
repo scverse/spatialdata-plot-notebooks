@@ -14,6 +14,16 @@ The fluent `.pl` API, layering, and styling on the in-memory `blobs`
 dataset. Ideal first read.
 :::
 
+:::{grid-item-card} Colour and palettes
+:link: color_and_palette
+:link-type: doc
+:img-top: color_and_palette.png
+
+How `color=` resolves, the v0.3.0 `groups` behaviour, and building
+perceptually well-spaced or colourblind-safe palettes with
+`make_palette` and `make_palette_from_data`.
+:::
+
 ::::
 
 ```{toctree}
@@ -21,4 +31,5 @@ dataset. Ideal first read.
 :maxdepth: 1
 
 getting_started
+color_and_palette
 ```
