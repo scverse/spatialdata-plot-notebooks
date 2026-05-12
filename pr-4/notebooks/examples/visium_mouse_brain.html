@@ -382,11 +382,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Blue">INFO    </span> Downloading visium_hne_sdata.zip from                                                                     
-         https://exampledata.scverse.org/squidpy/figshare/visium_hne_sdata.zip
-<span class=" -Color -Color-Blue">INFO    </span> Extracting                                                                                                
-         <span class=" -Color -Color-Magenta">data/spatialdata/</span>visium_hne_sdata.z
-         ip to data/spatialdata
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Blue">INFO    </span> Loading existing dataset from data/spatialdata/visium_hne_sdata.zarr
 </pre></div>
 </div>
 <div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SpatialData object, with associated Zarr store: data/spatialdata/visium_hne_sdata.zarr
@@ -409,12 +405,12 @@ with coordinate systems:
 <p>The H&amp;E image is a standard three-channel RGB image stored at multiple resolutions; <code class="docutils literal notranslate"><span class="pre">render_images</span></code> picks an appropriate scale automatically.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sdata</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_images</span><span class="p">(</span><span class="s2">&quot;hne&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sdata</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_images</span><span class="p">(</span><span class="s2">&quot;hne&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/f66e036a3b719ba350ea2976cba1bce94e3a96031db076f504887905fb84a986.png" src="../../_images/f66e036a3b719ba350ea2976cba1bce94e3a96031db076f504887905fb84a986.png" />
+<img alt="../../_images/299333020d201957a02c37646411e6996fa60bd68595581c07420e34fe4fed34.png" src="../../_images/299333020d201957a02c37646411e6996fa60bd68595581c07420e34fe4fed34.png" />
 </div>
 </div>
 </section>
@@ -423,12 +419,12 @@ with coordinate systems:
 <p>Visium spots are stored as <code class="docutils literal notranslate"><span class="pre">shapes</span></code>. Rendered alone they show the regular hexagonal capture pattern.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sdata</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_shapes</span><span class="p">(</span><span class="s2">&quot;spots&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sdata</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_shapes</span><span class="p">(</span><span class="s2">&quot;spots&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/2d60c9ddfbacfe82a85a36501be0b3fe9bb93196a595051e01429f7e613b91a7.png" src="../../_images/2d60c9ddfbacfe82a85a36501be0b3fe9bb93196a595051e01429f7e613b91a7.png" />
+<img alt="../../_images/c1fddc9ff33a6a8cb30c6ae29084e9ff6c9201b4b41d1f9341b0d651abf3bbc0.png" src="../../_images/c1fddc9ff33a6a8cb30c6ae29084e9ff6c9201b4b41d1f9341b0d651abf3bbc0.png" />
 </div>
 </div>
 </section>
@@ -438,15 +434,16 @@ with coordinate systems:
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
-    <span class="n">sdata</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_images</span><span class="p">(</span><span class="s2">&quot;hne&quot;</span><span class="p">)</span>
+    <span class="n">sdata</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_images</span><span class="p">(</span><span class="s2">&quot;hne&quot;</span><span class="p">)</span>
     <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_shapes</span><span class="p">(</span><span class="s2">&quot;spots&quot;</span><span class="p">,</span> <span class="n">fill_alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/ca4ebff3bb858980b8e1eac202d7e15ce2187d16a36fb7cd8189ac3bb462833a.png" src="../../_images/ca4ebff3bb858980b8e1eac202d7e15ce2187d16a36fb7cd8189ac3bb462833a.png" />
+<img alt="../../_images/2ef44bc0897de9d7a66122b367c074dd4f1d26a95eea9472871daf81abcc59dc.png" src="../../_images/2ef44bc0897de9d7a66122b367c074dd4f1d26a95eea9472871daf81abcc59dc.png" />
 </div>
 </div>
 </section>
@@ -456,15 +453,16 @@ with coordinate systems:
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
-    <span class="n">sdata</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_images</span><span class="p">(</span><span class="s2">&quot;hne&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_shapes</span><span class="p">(</span><span class="s2">&quot;spots&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Mbp&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;magma&quot;</span><span class="p">,</span> <span class="n">fill_alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">sdata</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_images</span><span class="p">(</span><span class="s2">&quot;hne&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_shapes</span><span class="p">(</span><span class="s2">&quot;spots&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Mbp&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/a7d69292610fbf215ba73a03f12c3b8e295f2d4bfec8c67ee7b193d53ec08918.png" src="../../_images/a7d69292610fbf215ba73a03f12c3b8e295f2d4bfec8c67ee7b193d53ec08918.png" />
+<img alt="../../_images/40a797375c1a88e95bfa9b23d300600209508ee821abcdbb1bab3cd59aaf49bc.png" src="../../_images/40a797375c1a88e95bfa9b23d300600209508ee821abcdbb1bab3cd59aaf49bc.png" />
 </div>
 </div>
 </section>
@@ -474,41 +472,48 @@ with coordinate systems:
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
-    <span class="n">sdata</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_images</span><span class="p">(</span><span class="s2">&quot;hne&quot;</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_shapes</span><span class="p">(</span><span class="s2">&quot;spots&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;cluster&quot;</span><span class="p">,</span> <span class="n">fill_alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
-    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="n">sdata</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_images</span><span class="p">(</span><span class="s2">&quot;hne&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_shapes</span><span class="p">(</span><span class="s2">&quot;spots&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;cluster&quot;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/9784fcab2eecfe07d57ef82c3764e1d4d81e1698009636fb9b29e9fb3e5d7e57.png" src="../../_images/9784fcab2eecfe07d57ef82c3764e1d4d81e1698009636fb9b29e9fb3e5d7e57.png" />
+<img alt="../../_images/302d0beb31d6d1a5c0ebf3a57e20f128dade7cf57552eb8311654d4c770dd1f6.png" src="../../_images/302d0beb31d6d1a5c0ebf3a57e20f128dade7cf57552eb8311654d4c770dd1f6.png" />
 </div>
 </div>
 </section>
 <section id="publication-style-styling">
 <h2>Publication-style styling<a class="headerlink" href="#publication-style-styling" title="Link to this heading">#</a></h2>
-<p>For a polished figure: keep the tissue context, color the spots by expression with a perceptually uniform colormap, draw a thin white outline so the spots stand out against the H&amp;E, and use a translucent fill so the histology underneath stays readable.</p>
+<p>For a polished figure: keep the tissue context, color the spots by expression with a perceptually uniform colormap, draw a thin outline so the spots stand out against the H&amp;E, and use a translucent fill so the histology underneath stays readable. Furthermore, we’ll add a title and a scalebar.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="p">(</span>
-    <span class="n">sdata</span><span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_images</span><span class="p">(</span><span class="s2">&quot;hne&quot;</span><span class="p">)</span>
+    <span class="n">sdata</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_images</span><span class="p">(</span><span class="s2">&quot;hne&quot;</span><span class="p">)</span>
     <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">render_shapes</span><span class="p">(</span>
         <span class="s2">&quot;spots&quot;</span><span class="p">,</span>
         <span class="n">color</span><span class="o">=</span><span class="s2">&quot;Mbp&quot;</span><span class="p">,</span>
-        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;magma&quot;</span><span class="p">,</span>
         <span class="n">fill_alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
         <span class="n">outline_width</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span>
-        <span class="n">outline_color</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+        <span class="n">outline_color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
         <span class="n">outline_alpha</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+    <span class="o">.</span><span class="n">pl</span><span class="o">.</span><span class="n">show</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Mbp expression in mouse brain (Visium)&quot;</span><span class="p">,</span>
+        <span class="n">scalebar_dx</span><span class="o">=</span><span class="mf">0.615</span><span class="p">,</span>  <span class="c1"># from https://www.10xgenomics.com/datasets/mouse-brain-section-coronal-1-standard-1-1-0</span>
+        <span class="n">scalebar_units</span><span class="o">=</span><span class="s2">&quot;um&quot;</span><span class="p">,</span>
+        <span class="n">scalebar_params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;location&quot;</span><span class="p">:</span> <span class="s2">&quot;lower right&quot;</span><span class="p">},</span>
+        <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="p">)</span>
 <span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../../_images/ba0a1c1be1b418fdd48b6241dad5380411be3ad9a37781d5726f2d1ba5d161c7.png" src="../../_images/ba0a1c1be1b418fdd48b6241dad5380411be3ad9a37781d5726f2d1ba5d161c7.png" />
+<img alt="../../_images/0b18d54d5806e3a17be83aa9176a359602a0174b2aae5c6afa3c3f6d2147886e.png" src="../../_images/0b18d54d5806e3a17be83aa9176a359602a0174b2aae5c6afa3c3f6d2147886e.png" />
 </div>
 </div>
 </section>
@@ -525,29 +530,29 @@ with coordinate systems:
 <span class="o">%</span><span class="k">load_ext</span> watermark
 <span class="c1"># fmt: on</span>
 
-<span class="o">%</span><span class="k">watermark</span> -v -m -p timeit,warnings,dask,datashader,matplotlib,numpy,pandas,scanpy,spatialdata,spatialdata_plot,geopandas,shapely
+<span class="o">%</span><span class="k">watermark</span> -v -m -p spatialdata,spatialdata_plot,scanpy,anndata,squidpy,matplotlib,numpy,pandas,dask,datashader,geopandas,shapely
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Python implementation: CPython
-Python version       : 3.13.7
+Python version       : 3.14.4
 IPython version      : 9.13.0
 
-timeit          : unknown
-warnings        : unknown
-dask            : 2026.1.1
-datashader      : 0.19.0
+spatialdata     : 0.7.3
+spatialdata_plot: 0.3.4
+scanpy          : 1.12.1
+anndata         : 0.12.13
+squidpy         : 1.8.1
 matplotlib      : 3.10.9
 numpy           : 2.4.4
 pandas          : 2.3.3
-scanpy          : 1.12.1
-spatialdata     : 0.7.3
-spatialdata_plot: 0.3.3
+dask            : 2026.1.1
+datashader      : 0.19.0
 geopandas       : 1.1.3
 shapely         : 2.1.2
 
-Compiler    : Clang 15.0.0 (clang-1500.1.0.2.5)
+Compiler    : Clang 20.1.8 
 OS          : Darwin
 Release     : 25.2.0
 Machine     : arm64
