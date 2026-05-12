@@ -35,6 +35,28 @@ Documentation = "https://spatialdata.scverse.org/projects/plot/en/latest/"
 [tool.hatch.build.targets.wheel]
 bypass-selection = true
 
+# Pixi-managed environment for running and authoring the notebooks. After
+# `pixi install`, register the Jupyter kernel once with `pixi run
+# kernel-install`; the kernel will point at the pixi env's Python, so
+# `pixi run lab` (or any external Jupyter) can execute the notebooks
+# against the exact pinned dependencies.
+[tool.pixi]
+workspace.channels = ["conda-forge"]
+workspace.platforms = ["linux-64", "osx-arm64"]
+
+dependencies.python = ">=3.11"
+dependencies.jupyterlab = "*"
+dependencies.ipykernel = "*"
+dependencies.nbconvert = "*"
+dependencies.watermark = "*"
+
+pypi-dependencies.spatialdata-plot = ">=0.3"
+pypi-dependencies.squidpy = "*"
+
+tasks.kernel-install = 'python -m ipykernel install --user --name sdata-plot-notebooks --display-name "sdata-plot-notebooks"'
+tasks.lab = "jupyter lab"
+tasks.execute = "jupyter nbconvert --to notebook --execute --inplace tutorials/*.ipynb examples/*.ipynb"
+
 [tool.ruff]
 line-length = 120
 target-version = "py311"
