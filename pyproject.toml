@@ -16,7 +16,7 @@ authors = [{ name = "scverse" }]
 # the notebooks end-to-end.
 [project.optional-dependencies]
 exec = [
-    "spatialdata-plot>=0.3",
+    "spatialdata-plot>=0.3.4",
     "squidpy",
     "jupyter",
     "ipykernel",
